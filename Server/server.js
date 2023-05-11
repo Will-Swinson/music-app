@@ -1,13 +1,13 @@
-import express from "express";
+import app from "./Middleware/middleware.js";
 import SpotifyWebApi from "spotify-web-api-node";
-import cors from "cors";
-import bodyParser from "body-parser";
 
-const app = express();
+import postgres from "postgres";
+
 const port = 3001;
 
-app.use(cors());
-app.use(bodyParser.json());
+export const sql = postgres(
+  "postgres://willswinson:Swinson1!@127.0.0.1:5432/music_db"
+);
 
 app.post("/refresh", async (req, res) => {
   try {
@@ -35,7 +35,7 @@ app.post("/refresh", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const code = req.body.code;
-
+    console.log(code);
     const spotifyApi = new SpotifyWebApi({
       redirectUri: "http://localhost:3000",
       clientId: "269f72af8ff1461f967173ee0505ef74",
