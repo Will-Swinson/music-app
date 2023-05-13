@@ -15,8 +15,8 @@ app.post("/refresh", async (req, res) => {
     console.log(refreshToken);
     const spotifyApi = new SpotifyWebApi({
       redirectUri: "http://localhost:3000",
-      clientId: "269f72af8ff1461f967173ee0505ef74",
-      clientSecret: "6e4d3b759f774feea6728885f382ab61",
+      clientId: "6149eda588f347a0856c12deaaff09a3",
+      clientSecret: "d32b43b33b194b2db6606227e2fbd223",
       refreshToken: refreshToken,
     });
 
@@ -35,11 +35,11 @@ app.post("/refresh", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const code = req.body.code;
-    console.log(code);
+    console.log(req.body);
     const spotifyApi = new SpotifyWebApi({
       redirectUri: "http://localhost:3000",
-      clientId: "269f72af8ff1461f967173ee0505ef74",
-      clientSecret: "6e4d3b759f774feea6728885f382ab61",
+      clientId: "6149eda588f347a0856c12deaaff09a3",
+      clientSecret: "d32b43b33b194b2db6606227e2fbd223",
     });
 
     const data = await spotifyApi.authorizationCodeGrant(code);
