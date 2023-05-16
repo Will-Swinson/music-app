@@ -14,13 +14,14 @@ export default function Player({ accessToken, trackUri }) {
   useEffect(() => setPlay(true), [trackUri]);
 
   if (!accessToken) return null;
-
+  console.log(trackUri);
   return (
     <SpotifyPlayer
       uri={trackUri ? `${trackUri}` : ``}
       size={size}
       view={view}
       theme="black"
+      play={play}
       playerOptions={{
         name: "My Spotify Player",
         getOAuthToken: (cb) => {

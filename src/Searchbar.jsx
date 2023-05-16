@@ -18,6 +18,11 @@ export default function Searchbar({ code }) {
     setPlayingTrack(track);
   }
 
+  function selectedTrack(track) {
+    let selectedTrack = track;
+    return selectedTrack;
+  }
+
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
@@ -86,6 +91,7 @@ export default function Searchbar({ code }) {
               track={track}
               key={track.uri}
               chooseTrack={chooseTrack}
+              selectedTrack={selectedTrack}
             />
           );
         })}
