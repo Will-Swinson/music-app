@@ -8,7 +8,7 @@ import Login from "./Login";
 // Get code from the URL
 
 const code = new URLSearchParams(window.location.search).get("code");
-console.log(code);
+
 function App() {
   return code ? <Dashboard code={code} /> : <Login />;
 }

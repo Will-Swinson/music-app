@@ -4,10 +4,12 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Searchbar from "./Searchbar";
-
+import axios from "axios";
+import PlaylistCards from "./PlaylistCards";
+import useAuth from "./useAuth";
 const navigation = [
   { name: "Albums", href: "#", current: true },
-  { name: "Artists", href: "#", current: false },
+  { name: "Playlist", href: "/api/playlist", current: false },
   { name: "New Releases", href: "#", current: false },
   { name: "TOP 100 SONGS", href: "#", current: false },
   { name: "Suggestions", href: "#", current: false },

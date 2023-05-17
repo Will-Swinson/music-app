@@ -3,6 +3,8 @@ import useAuth from "./useAuth.jsx";
 import SpotifyWebApi from "spotify-web-api-node";
 import TrackSearchResult from "./TrackSearchResult.jsx";
 import Player from "./Player.jsx";
+import PlaylistCards from "./PlaylistCards.jsx";
+import axios from "axios";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: "6149eda588f347a0856c12deaaff09a3",
@@ -13,6 +15,44 @@ export default function Searchbar({ code }) {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [playingTrack, setPlayingTrack] = useState();
+
+  let currentUser = window.localStorage.getItem("selectedUserId");
+  // const accessToken = useAuth(code);
+
+  const handlePlaylistClick = async (event) => {
+    event.preventDefault();
+
+    console.log(currentUser);
+    // Make the GET request
+    const response = await axios.get("/api/playlist/all", {
+      params: {
+        userId: currentUser,
+      },
+    });
+
+    const trackURI = response.data.playlist.song_id;
+    // Set the track URI you want to search for
+    // const trackURI = response.data.playlist.song_id;
+
+    // // Make the search request
+    const spotifyResponse = await axios.get(
+      "https://api.spotify.com/v1/search",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          q: `uri:${trackURI}`,
+          type: "track",
+          limit: 1,
+        },
+      }
+    );
+    console.log(spotifyResponse.data.tracks.items[0]);
+    const songName = track.name;
+    const artist = track.artists[0].name;
+    const songImage = track.album.images[0].url;
+  };
 
   function chooseTrack(track) {
     setPlayingTrack(track);
@@ -69,6 +109,9 @@ export default function Searchbar({ code }) {
   return (
     <>
       <div className="flex ml-96 mt-6">
+        <div className="h-4 w-8 text-white" onClick={handlePlaylistClick}>
+          <button>Playlists</button>
+        </div>
         <form
           onSubmit={handleSearchSubmit}
           className="w-64 h-8 flex  justify-center bg-white"
@@ -99,6 +142,7 @@ export default function Searchbar({ code }) {
       <div>
         <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
       </div>
+      <div>{/* <PlaylistCards accessToken={accessToken} />{" "} */}</div>
     </>
   );
 }

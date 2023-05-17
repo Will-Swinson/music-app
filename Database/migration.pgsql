@@ -13,10 +13,10 @@ CREATE TABLE users
 CREATE TABLE playlists
 (
   id                serial  NOT NULL,
-  title             text    NOT NULL,
-  created           date    NOT NULL,
-  public_or_private boolean NOT NULL,
-  last_modified     date    NOT NULL,
+  title             text    ,
+  created           date    ,
+  public_or_private boolean ,
+  last_modified     date    ,
   user_id           INT  NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users (id),
   PRIMARY KEY (id)
@@ -25,7 +25,7 @@ CREATE TABLE playlists
 CREATE TABLE playlist_songs
 (
   playlist_id INT NOT NULL,
-  song_id     INT NOT NULL,
+  song_id     TEXT NOT NULL,
   FOREIGN KEY (playlist_id) REFERENCES playlists (id),
   PRIMARY KEY (playlist_id, song_id)
 );

@@ -1,29 +1,6 @@
 import React from "react";
-import Player from "./Player";
-import Searchbar from "./Searchbar";
-import axios from "axios";
 
-export default function TrackSearchResult({
-  track,
-  chooseTrack,
-  selectedTrack,
-}) {
-  let currentUser = window.localStorage.getItem("selectedUserId");
-
-  function handlePlay() {
-    chooseTrack(track);
-  }
-
-  async function handleAddSong() {
-    const addingSong = selectedTrack(track);
-    const response = await axios.post("/api/playlist", addingSong, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${currentUser}`,
-      },
-    });
-  }
-
+export default function PlaylistCards() {
   return (
     <>
       <div className="bg-gray-600 w-44 h-44 mb-4 mt-2 p-0 ml-5 flex flex-row-reverse flex-col rounded-lg items-center cursor-pointer relative">

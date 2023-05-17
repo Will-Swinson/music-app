@@ -11,4 +11,5 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/api/users", userRouter);
 app.use("/api/playlist", playlistRouter);
+
 export default app;
