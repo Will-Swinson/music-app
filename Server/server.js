@@ -6,7 +6,7 @@ import postgres from "postgres";
 const port = 3001;
 
 export const sql = postgres(
-  "postgres://willswinson:Swinson1!@127.0.0.1:5432/music_db"
+  "postgres://db_3d_portfolio_database_user:ectIrHXtoTsuCDx64vu0k4boyQShs4gj@dpg-chbtp3qk728tp98cspd0-a.oregon-postgres.render.com/music_db?ssl=true"
 );
 
 app.post("/refresh", async (req, res) => {
