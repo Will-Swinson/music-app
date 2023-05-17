@@ -17,8 +17,6 @@ export const addSong = async (req, res) => {
 
 export const getPlaylist = async (req, res) => {
   const userId = Number(req.query.userId);
-  console.log("MADE IT IN");
-  console.log(userId);
 
   const playlist = await sql`SELECT ps.playlist_id, ps.song_id
   FROM playlist_songs ps

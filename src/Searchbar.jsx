@@ -15,11 +15,15 @@ export default function Searchbar({ code }) {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [playingTrack, setPlayingTrack] = useState();
+  const [playlist, setPlaylist] = useState([]);
+  const [showPlaylist, setShowPlaylist] = useState(false);
 
   let currentUser = window.localStorage.getItem("selectedUserId");
   // const accessToken = useAuth(code);
 
   const handlePlaylistClick = async (event) => {
+    setShowPlaylist((prevState) => !prevState);
+
     event.preventDefault();
 
     console.log(currentUser);
@@ -30,28 +34,43 @@ export default function Searchbar({ code }) {
       },
     });
 
-    const trackURI = response.data.playlist.song_id;
-    // Set the track URI you want to search for
-    // const trackURI = response.data.playlist.song_id;
+    const trackURI = response.data.playlist.map((track) => track.song_id);
 
-    // // Make the search request
-    const spotifyResponse = await axios.get(
-      "https://api.spotify.com/v1/search",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          q: `uri:${trackURI}`,
-          type: "track",
-          limit: 1,
-        },
-      }
-    );
-    console.log(spotifyResponse.data.tracks.items[0]);
-    const songName = track.name;
-    const artist = track.artists[0].name;
-    const songImage = track.album.images[0].url;
+    const trackInfoArray = [];
+
+    for (const track of trackURI) {
+      const trackId = track.split(":").pop();
+
+      const spotifyResponse = await axios.get(
+        `https://api.spotify.com/v1/tracks/${trackId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      // Extract the desired information from the response
+      const { name, artists, album } = spotifyResponse.data;
+
+      // Extract the first artist's name
+      const artistName = artists[0].name;
+
+      // Extract the album image URL
+      const imageUrl = album.images[0].url;
+
+      // Create an object with the track information
+      const trackInfo = {
+        name,
+        artist: artistName,
+        imageUrl,
+        uri: track,
+      };
+
+      trackInfoArray.push(trackInfo);
+    }
+
+    setPlaylist(trackInfoArray);
   };
 
   function chooseTrack(track) {
@@ -106,10 +125,14 @@ export default function Searchbar({ code }) {
     return () => (cancel = true);
   }, [search, accessToken]);
 
+  console.log(playingTrack);
   return (
     <>
       <div className="flex ml-96 mt-6">
-        <div className="h-4 w-8 text-white" onClick={handlePlaylistClick}>
+        <div
+          className="h-8 w-16 ml-84 bg-white text-blue-400 ml-64 mr-8 flex justify-center items-center text-center rounded-full"
+          onClick={handlePlaylistClick}
+        >
           <button>Playlists</button>
         </div>
         <form
@@ -139,10 +162,26 @@ export default function Searchbar({ code }) {
           );
         })}
       </div>
+      {showPlaylist && (
+        <div className="grid grid-cols-5 mt-6 mb-8">
+          {playlist.map((track) => (
+            <PlaylistCards
+              track={track}
+              key={track.name}
+              chooseTrack={chooseTrack}
+              selectedTrack={selectedTrack}
+            />
+          ))}
+        </div>
+      )}
       <div>
         <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
       </div>
-      <div>{/* <PlaylistCards accessToken={accessToken} />{" "} */}</div>
+      <div>
+        {/* {playlist.map((song) => {
+          console.log(song);
+        })} */}
+      </div>
     </>
   );
 }
